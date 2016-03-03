@@ -15,15 +15,7 @@ var Countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla"
       ,"Turkey","Turkmenistan","Turks &amp; Caicos","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Venezuela","Vietnam","Virgin Islands (US)"
       ,"Yemen","Zambia","Zimbabwe"];
 
-/*
- * If your app already uses react-dnd, then having multiple
- * backend will raise an integrity violation exception. In such cases
- * use the WithOutContext version of the component.
- * var Tags = ReactTags.WithOutContext;
- * The example below uses the `WithContext` since this the sole component
- * using the react-dnd component.
-*/
-var Tags = ReactTags.WithContext;
+var Tags = ReactTags;
 
 var App = React.createClass({
     getInitialState: function() {
@@ -45,16 +37,6 @@ var App = React.createClass({
         });
         this.setState({tags: tags});
     },
-    handleDrag: function(tag, currPos, newPos) {
-        var tags = this.state.tags;
-
-        // mutate array
-        tags.splice(currPos, 1);
-        tags.splice(newPos, 0, tag);
-
-        // re-render
-        this.setState({ tags: tags });
-    },
     render: function() {
         var tags = this.state.tags;
         var suggestions = this.state.suggestions;
@@ -64,7 +46,6 @@ var App = React.createClass({
                     suggestions={Countries}
                     handleDelete={this.handleDelete}
                     handleAddition={this.handleAddition}
-                    handleDrag={this.handleDrag}
                     minQueryLength={2} />
                 <hr />
                 <pre>

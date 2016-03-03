@@ -7,7 +7,6 @@ React tags is a simple tagging component ready to drop in your React projects. T
 ### Features
 - Autocomplete based on a suggestion list
 - Keyboard friendly and mouse support
-- Reorder tags using drag and drop
 
 ### Why
 Because I was looking for an excuse to build a standalone component and publish it in the wild? To be honest, I needed a tagging component that provided the above features for my [React-Surveyman](http://github.com/prakhar1989/react-surveyman) project. Since I was unable to find one which met my requirements (and the fact that I generally enjoy re-inventing the wheel) this is what I came up with.
@@ -24,14 +23,13 @@ The preferred way of using the component is via NPM
 ```
 npm install --save react-tag-input
 ```
-It is, however, also available to be used separately (`dist/ReactTags.min.js`). If you prefer this method remember to include [ReactDND](https://github.com/gaearon/react-dnd) as a dependancy. Refer to the [demo](http://prakhar.me/react-tags/example) to see how this works.
 
 ### Usage
 
 Here's a sample implementation that initializes the component with a list of initial `tags` and `suggestions` list. Apart from this, there are multiple events, handlers for which need to be set. For more details, go through the [API](#Options).
 
 ```javascript
-var ReactTags = require('react-tag-input').WithContext;
+var ReactTags = require('react-tag-input');
 
 var App = React.createClass({
     getInitialState: function() {
@@ -53,16 +51,6 @@ var App = React.createClass({
         });
         this.setState({tags: tags});
     },
-    handleDrag: function(tag, currPos, newPos) {
-        var tags = this.state.tags;
-
-        // mutate array
-        tags.splice(currPos, 1);
-        tags.splice(newPos, 0, tag);
-
-        // re-render
-        this.setState({ tags: tags });
-    },
     render: function() {
         var tags = this.state.tags;
         var suggestions = this.state.suggestions;
@@ -72,7 +60,6 @@ var App = React.createClass({
                     suggestions={suggestions}
                     handleDelete={this.handleDelete}
                     handleAddition={this.handleAddition}
-                    handleDrag={this.handleDrag} />
             </div>
         )
     }
@@ -81,13 +68,6 @@ var App = React.createClass({
 React.render(<App />, document.getElementById('app'));
 ```
 
-**A note about `Contexts`**
-One of the dependancies of this component is the [react-dnd](https://github.com/gaearon/react-dnd) library. Since the 1.0 version, the original author has changed the API and requires the application using any draggable components to have a top-level [backend](http://gaearon.github.io/react-dnd/docs-html5-backend.html) context. So if you're using this component in an existing Application that uses React-DND you will already have a backend defined, in which case, you should `require` the component *without* the context.
-
-```javascript
-var { ReactTags } = require('react-tag-input').WithOutContext;
-```
-Otherwise, you can simply import along with the backend itself (as shown above). If you have ideas to make this API better, I'd [love to hear](https://github.com/prakhar1989/react-tags/issues/new).
 
 <a name="Options"></a>
 ### Options
@@ -99,7 +79,6 @@ Otherwise, you can simply import along with the backend itself (as shown above).
 - [`labelField`](#labelFieldOption)
 - [`handleAddition`](#handleAdditionOption)
 - [`handleDelete`](#handleDeleteOption)
-- [`handleDrag`](#handleDragOption)
 - [`autofocus`](#autofocus)
 - [`allowDeleteFromEmptyInput`](#allowDeleteFromEmptyInput)
 - [`handleInputChange`](#handleInputChange)
@@ -144,8 +123,7 @@ Provide an alternative `label` property for the tags. Defaults to `text`.
 ```
 <ReactTags tags={tags}
     suggestions={}
-    labelField={'name'}
-    handleDrag={} />
+    labelField={'name'} />
 ```
 This is useful if your data uses the `text` property for something else.
 
@@ -169,10 +147,6 @@ function(i) {
     // delete the tag at index i
 }
 ```
-
-<a name="handleDragOption"></a>
-##### handleDrag (required)
-Function called when the user drags a tag.
 
 ```js
 function(tag, currPos, newPos) {
@@ -251,7 +225,7 @@ This option has no effect if there are no [`suggestions`](#suggestionsOption).
 
 <a name="readOnly"></a>
 ##### readOnly (optional)
-Renders the component in read-only mode without the input box and `removeComponent`. This also disables the drag-n-drop feature.
+Renders the component in read-only mode without the input box and `removeComponent`.
 
 ### Styling
 `<ReactTags>` does not come up with any styles. However, it is very easy to customize the look of the component the way you want it. The component provides the following classes with which you can style -
@@ -277,4 +251,4 @@ python -m SimpleHTTPServer ### open in browser
 Got ideas on how to make this better? Open an issue! I'm yet to add tests so keep your PRs on hold :grinning:
 
 ### Thanks
-The autocomplete dropdown is inspired by Lea Verou's [awesomeplete](https://github.com/LeaVerou/awesomplete) library. The Drag and drop functionality is provided by Dan Abramov's insanely useful [ReactDND](https://github.com/gaearon/react-dnd) library.
+The autocomplete dropdown is inspired by Lea Verou's [awesomeplete](https://github.com/LeaVerou/awesomplete) library.
